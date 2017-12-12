@@ -125,6 +125,27 @@ Which makes the headers a little nicer:
     jj abrams   | 333-555-1212
 
 
+## Caveats
+
+It should be obvious that this utility pulls in all rows, and then
+displays them taking into account the widest values when determining
+the appropriate column width.  Accordingly, all rows to be processed
+will be in memory as long as the table object exists.  So this isn't
+a good tool for formatting a terrabyte of tabular data.
+
+The focus is on _display_ of data.  Think of a `Legitable::Table` as
+a _page_ of data.  If you have multiple pages of data, you'd probably
+want to repeat the headers anyway at some point, so it makes sense to
+just create a new table after every *n* rows.
+
+This puts me in mind of some ideas for the future:
+
+- ability to "flush" all rows so that the table's formatting can be
+  re-used and re-loaded.
+- ability to fix the width of a column and to word wrap within that
+  width in order to control the overall width of the table.
+- ANSI color support
+
 ## Development
 
 After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
