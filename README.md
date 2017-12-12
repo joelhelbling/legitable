@@ -24,13 +24,19 @@ Or install it yourself as:
 
 ## Usage
 
-First, create a table object:
+First, require it:
+
+```ruby
+require 'legitable'
+```
+
+Then, create a table object:
 
 ```ruby
 table = Legitable::Table.new
 ```
 
-Then add some rows:
+Now add some rows:
 
 ```ruby
 table << { name: 'joss whedon', phone: '444-555-1212' }
