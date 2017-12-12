@@ -1,8 +1,10 @@
 # Legitable
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/legitable`. To experiment with that code, run `bin/console` for an interactive prompt.
+Tables are easier to read.  Legitable makes it easy to display plain text output in tabular form.
 
-TODO: Delete this and the text above, and describe your gem
+Given a normal series of hash objects as rows _(where "normal" means that all hashes have the same
+keys)_, the first row's keys will be taken as the table's column headers; deviations in subsequent
+hashes will be ignored.
 
 ## Installation
 
@@ -22,7 +24,28 @@ Or install it yourself as:
 
 ## Usage
 
-TODO: Write usage instructions here
+First, create a table object:
+
+```ruby
+table = Legitable::Table.new
+```
+
+Then add some rows:
+
+```ruby
+table << { name: 'Joss Whedon', phone: '444-555-1212' }
+table << { name: 'JJ Abrams', phone: '333-555-1212' }
+```
+
+And then you can display it:
+```ruby
+puts table.to_s
+```
+
+    NAME        | PHONE       
+    --------------------------
+    Joss Whedon | 444-555-1212
+    JJ Abrams   | 333-555-1212
 
 ## Development
 

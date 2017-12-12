@@ -9,7 +9,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Joel Helbling"]
   spec.email         = ["joel@joelhelbling.com"]
 
-  spec.summary       = %q{Plain text tables}
+  spec.summary       = %q{Easy plain text tables}
   spec.description   = %q{Tables are easier to read.  Legitable makes it easy to display plain text output in tabular form.}
   spec.homepage      = "https://github.com/joelhelbling/legitable"
   spec.license       = "MIT"
