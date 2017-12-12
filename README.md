@@ -33,8 +33,8 @@ table = Legitable::Table.new
 Then add some rows:
 
 ```ruby
-table << { name: 'Joss Whedon', phone: '444-555-1212' }
-table << { name: 'JJ Abrams', phone: '333-555-1212' }
+table << { name: 'joss whedon', phone: '444-555-1212' }
+table << { name: 'jj abrams', phone: '333-555-1212' }
 ```
 
 And then you can display it:
@@ -44,8 +44,86 @@ puts table.to_s
 
     NAME        | PHONE       
     --------------------------
-    Joss Whedon | 444-555-1212
-    JJ Abrams   | 333-555-1212
+    joss whedon | 444-555-1212
+    jj abrams   | 333-555-1212
+
+### Right-aligned columns
+
+Some data, such as numbers, look better aligned to the right instead
+of to the left:
+
+```ruby
+table = Legitable::Table.new(alignment: { bytes: :right })
+
+table << { bytes: 12, file: 'foo.zip' }
+table << { bytes: 1200, file: 'bar.zip' }
+table << { bytes: 12000000, file: 'baz.zip' }
+```
+
+Which makes the numbers much easier to read:
+
+       BYTES | FILE   
+    ------------------
+          12 | foo.zip
+        1200 | bar.zip
+    12000000 | baz.zip
+
+### Changing up the look
+
+Some aspects of the table are configurable, such as the column
+delimiter (which defaults to `" | "`) and the character used as
+a header row separator (which defaults to `"-"`).
+
+```ruby
+table = Legitable::Table.new(delimiter: '  ', separator: '=')
+```
+
+Which would give us this:
+
+
+    NAME         PHONE       
+    =========================
+    joss whedon  444-555-1212
+    jj abrams    333-555-1212
+
+### Formatting columns
+
+Sometimes the raw data as it comes in isn't exactly what you want
+to display.  So you can define formatters:
+
+```ruby
+title = Legitable::Table.new do
+  formatting :name do |value|
+    "_#{value.titleize}_"
+  end
+end
+```
+
+Which, of course, improves the display of the names column:
+
+
+    NAME          | PHONE       
+    ----------------------------
+    _Joss Whedon_ | 444-555-1212
+    _JJ Abrams_   | 333-555-1212
+
+And, of course, you can do something similar for the column headings:
+
+```ruby
+title = Legitable::Table.new do
+  formatting_headers do |header|
+    header.capitalize
+  end
+end
+```
+
+Which makes the headers a little nicer:
+
+    Name        | Phone       
+    --------------------------
+    joss whedon | 444-555-1212
+    jj abrams   | 333-555-1212
+
 
 ## Development
 
