@@ -19,6 +19,7 @@ module Legitable
     def <<(row)
       initialize_headers(row) if headers.empty?
       add_row row
+      self
     end
 
     def to_s

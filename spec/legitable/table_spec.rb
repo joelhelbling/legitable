@@ -91,12 +91,46 @@ phoolie | __bar__   | bububububazzzz
     Given { subject << { foo: 'phoolie', bar: 'bar', baz: 'bububububazzzz' } }
 
     Then do
-      subject.to_s == <<-EOS
+      subject.to_s == <<EOS
 Foo     | Bar   | Baz           
 --------------------------------
 phew    | baarr | bajh          
 phoolie | bar   | bububububazzzz
-      EOS
+EOS
+    end
+  end
+
+  context 'table with only one column' do
+    Given { subject << { foo: 'foo' } }
+    Given { subject << { foo: 'phew' } }
+    Given { subject << { foo: 'foolishness' } }
+
+    Then do
+      subject.to_s == <<-TABLE
+FOO        
+-----------
+foo        
+phew       
+foolishness
+      TABLE
+    end
+  end
+
+  context 'appending repeatedly' do
+    Given do
+      subject << { foo: 'foo' } \
+              << { foo: 'phew' } \
+              << { foo: 'foolishness' }
+    end
+
+    Then do
+      subject.to_s == <<-TABLE
+FOO        
+-----------
+foo        
+phew       
+foolishness
+      TABLE
     end
   end
 end
