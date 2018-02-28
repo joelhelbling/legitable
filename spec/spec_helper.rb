@@ -14,3 +14,27 @@ RSpec.configure do |config|
     c.syntax = :expect
   end
 end
+
+RSpec::Matchers.define :look_like do |expected|
+  def left_shifted_expected
+    expected.gsub(/^ {6}/, '')
+  end
+
+  match do |actual|
+    actual == left_shifted_expected
+  end
+
+  description do
+    "looks like ->\n#{expected}"
+  end
+
+  failure_message do |actual|
+    <<-FAIL.gsub(/^ {6}/, '')
+      __EXPECTED THIS____________________
+      #{actual}
+
+      __TO LOOK LIKE THAT________________
+      #{left_shifted_expected}
+    FAIL
+  end
+end

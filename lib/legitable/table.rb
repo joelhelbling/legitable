@@ -23,12 +23,10 @@ module Legitable
     end
 
     def to_s
-      render_headers +
-      rows.map do |row|
-        headers.map do |header|
-          render_cell(header, row[header])
-        end.join(delimiter)
-      end.join("\n") + "\n"
+      <<-EOS
+#{render_headers}
+#{render_rows}
+      EOS
     end
 
     private
@@ -59,7 +57,7 @@ module Legitable
     def render_headers
       headers.map do |header|
         render_cell(header, header_formatter.call(header))
-      end.join(delimiter) + "\n" + (separator * row_width) + "\n"
+      end.join(delimiter) + "\n" + (separator * row_width)
     end
 
     def row_width
@@ -67,6 +65,14 @@ module Legitable
       headers.sum(width) do |header|
         format[header].width
       end
+    end
+
+    def render_rows
+      rows.map { |row| render_row(row) }.join("\n")
+    end
+
+    def render_row(row)
+      headers.map { |header| render_cell header, row[header] }.join(delimiter)
     end
 
     def render_cell(header, value)
@@ -90,7 +96,11 @@ module Legitable
     end
 
     def header_formatter
-      @header_formatter ||= Proc.new {|header| header.to_s.upcase }
+      @header_formatter ||= default_header_formatter
+    end
+
+    def default_header_formatter
+      @default_header_formatter ||= Proc.new { |header| header.to_s.upcase }
     end
   end
 end

@@ -1,20 +1,17 @@
-
 RSpec.describe Legitable::Table do
-  When(:result) { subject.to_s }
+  When(:table) { subject.to_s }
 
   context 'data has varying width' do
     Given { subject << { foo: 'phew', bar: 'baarr', baz: 'bajh' } }
     Given { subject << { foo: 'phoolie', bar: 'bar', baz: 'bububububazzzz' } }
 
     Then { subject.headers == [:foo, :bar, :baz] }
-    Then do
-      subject.to_s == <<-EOS
-FOO     | BAR   | BAZ           
---------------------------------
-phew    | baarr | bajh          
-phoolie | bar   | bububububazzzz
-      EOS
-    end
+    Then { expect(table).to look_like(<<-___) }
+      FOO     | BAR   | BAZ           
+      --------------------------------
+      phew    | baarr | bajh          
+      phoolie | bar   | bububububazzzz
+    ___
   end
 
   context 'data has right-aligned fields' do
@@ -23,15 +20,13 @@ phoolie | bar   | bububububazzzz
     Given { subject << { bytes: 1200, file: 'bar.zip' } }
     Given { subject << { bytes: 12000000, file: 'baz.zip' } }
 
-    Then do
-      subject.to_s == <<-EOS
-   BYTES | FILE   
-------------------
-      12 | foo.zip
-    1200 | bar.zip
-12000000 | baz.zip
-      EOS
-    end
+    Then { expect(table).to look_like(<<-___) }
+         BYTES | FILE   
+      ------------------
+            12 | foo.zip
+          1200 | bar.zip
+      12000000 | baz.zip
+    ___
   end
 
   context 'change up the look!' do
@@ -45,22 +40,20 @@ phoolie | bar   | bububububazzzz
     Given { subject << { bytes: 1200, file: 'bar.zip' } }
     Given { subject << { bytes: 12000000, file: 'baz.zip' } }
 
-    Then do
-      subject.to_s == <<-EOS
-   BYTES  FILE   
-=================
-      12  foo.zip
-    1200  bar.zip
-12000000  baz.zip
-      EOS
-    end
+    Then { expect(table).to look_like(<<-___) }
+         BYTES  FILE   
+      =================
+            12  foo.zip
+          1200  bar.zip
+      12000000  baz.zip
+    ___
   end
 
   context 'with column processors' do
     Given(:subject) do
       described_class.new do
         formatting :bar do |value|
-          "__#{value}__"
+          "~~#{value}~~"
         end
       end
     end
@@ -68,14 +61,12 @@ phoolie | bar   | bububububazzzz
     Given { subject << { foo: 'phew', bar: 'baarr', baz: 'bajh' } }
     Given { subject << { foo: 'phoolie', bar: 'bar', baz: 'bububububazzzz' } }
 
-    Then do
-      subject.to_s == <<-EOS
-FOO     | BAR       | BAZ           
-------------------------------------
-phew    | __baarr__ | bajh          
-phoolie | __bar__   | bububububazzzz
-      EOS
-    end
+    Then { expect(table).to look_like(<<-___) }
+      FOO     | BAR       | BAZ           
+      ------------------------------------
+      phew    | ~~baarr~~ | bajh          
+      phoolie | ~~bar~~   | bububububazzzz
+    ___
   end
 
   context 'with header processors' do
@@ -90,14 +81,12 @@ phoolie | __bar__   | bububububazzzz
     Given { subject << { foo: 'phew', bar: 'baarr', baz: 'bajh' } }
     Given { subject << { foo: 'phoolie', bar: 'bar', baz: 'bububububazzzz' } }
 
-    Then do
-      subject.to_s == <<EOS
-Foo     | Bar   | Baz           
---------------------------------
-phew    | baarr | bajh          
-phoolie | bar   | bububububazzzz
-EOS
-    end
+    Then { expect(table).to look_like(<<-___) }
+      Foo     | Bar   | Baz           
+      --------------------------------
+      phew    | baarr | bajh          
+      phoolie | bar   | bububububazzzz
+    ___
   end
 
   context 'table with only one column' do
@@ -105,15 +94,13 @@ EOS
     Given { subject << { foo: 'phew' } }
     Given { subject << { foo: 'foolishness' } }
 
-    Then do
-      subject.to_s == <<-TABLE
-FOO        
------------
-foo        
-phew       
-foolishness
-      TABLE
-    end
+    Then { expect(table).to look_like(<<-___) }
+      FOO        
+      -----------
+      foo        
+      phew       
+      foolishness
+    ___
   end
 
   context 'appending repeatedly' do
@@ -123,14 +110,12 @@ foolishness
               << { foo: 'foolishness' }
     end
 
-    Then do
-      subject.to_s == <<-TABLE
-FOO        
------------
-foo        
-phew       
-foolishness
-      TABLE
-    end
+    Then { expect(table).to look_like(<<-___) }
+      FOO        
+      -----------
+      foo        
+      phew       
+      foolishness
+    ___
   end
 end
