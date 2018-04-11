@@ -21,7 +21,7 @@ RSpec::Matchers.define :look_like do |expected|
   end
 
   match do |actual|
-    actual == left_shifted_expected
+    actual.to_s == left_shifted_expected
   end
 
   description do

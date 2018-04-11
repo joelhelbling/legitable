@@ -116,7 +116,7 @@ Which, of course, improves the display of the names column:
 And, of course, you can do something similar for the column headings:
 
 ```ruby
-title = Legitable::Table.new do
+table = Legitable::Table.new do
   formatting_headers do |header|
     header.capitalize
   end
@@ -127,6 +127,25 @@ Which makes the headers a little nicer:
 
     Name        | Phone       
     --------------------------
+    joss whedon | 444-555-1212
+    jj abrams   | 333-555-1212
+
+
+### Markdown Style
+
+Sometimes your tables end up in a markdown document.  Legitable is nice
+for plain text viewing, but the default table style is not quite legit
+as a markdown table.  You can fix that with the markdown style:
+
+```ruby
+table = Legitable::Table.new(style: :markdown)
+```
+
+The result is very similar, but adds the delimiter to the header
+separator, which causes it to render properly as markdown:
+
+    NAME        | PHONE       
+    ------------|-------------
     joss whedon | 444-555-1212
     jj abrams   | 333-555-1212
 

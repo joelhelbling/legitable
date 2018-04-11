@@ -2,9 +2,9 @@ require 'ostruct'
 
 module Legitable
   class Table
-    attr_reader :rows, :headers, :delimiter, :separator, :format
+    attr_reader :rows, :headers, :delimiter, :separator, :format, :style
 
-    def initialize(alignment: {}, delimiter: ' | ', separator: '-', &block)
+    def initialize(alignment: {}, delimiter: ' | ', separator: '-', style: nil, &block)
       @rows = []
       @headers = []
       @format = {}
@@ -12,6 +12,12 @@ module Legitable
       @alignment = alignment
       @delimiter = delimiter
       @separator = separator
+      @style = style
+
+      if style == :markdown
+        @delimiter = ' | '
+        @separator = '-'
+      end
 
       self.instance_eval(&block) unless block.nil?
     end
@@ -57,7 +63,7 @@ module Legitable
     def render_headers
       headers.map do |header|
         render_cell(header, header_formatter.call(header))
-      end.join(delimiter) + "\n" + (separator * row_width)
+      end.join(delimiter) + "\n" + render_separator
     end
 
     def row_width
@@ -73,6 +79,16 @@ module Legitable
 
     def render_row(row)
       headers.map { |header| render_cell header, row[header] }.join(delimiter)
+    end
+
+    def render_separator
+      if style == :markdown
+        headers.map do |header|
+          separator * format[header].width
+        end.join('-|-')
+      else
+        separator * row_width
+      end
     end
 
     def render_cell(header, value)
