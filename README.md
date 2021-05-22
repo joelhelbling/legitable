@@ -1,3 +1,4 @@
+![Tests](https://github.com/joelhelbling/legitable/actions/workflows/ruby.yml/badge.svg)
 # Legitable
 
 Tables are easier to read.  Legitable makes it easy to display plain text output in tabular form.
