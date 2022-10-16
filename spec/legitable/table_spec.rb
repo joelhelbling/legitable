@@ -1,9 +1,9 @@
 RSpec.describe Legitable::Table do
   Given(:table) { subject }
 
-  context 'data has varying width' do
-    Given { table << { foo: 'phew', bar: 'baarr', baz: 'bajh' } }
-    Given { table << { foo: 'phoolie', bar: 'bar', baz: 'bububububazzzz' } }
+  context "data has varying width" do
+    Given { table << {foo: "phew", bar: "baarr", baz: "bajh"} }
+    Given { table << {foo: "phoolie", bar: "bar", baz: "bububububazzzz"} }
 
     Then { table.headers == [:foo, :bar, :baz] }
     Then { expect(table).to look_like(<<-___) }
@@ -14,11 +14,11 @@ RSpec.describe Legitable::Table do
     ___
   end
 
-  context 'data has right-aligned fields' do
-    Given(:table) { described_class.new alignment: { bytes: :right } }
-    Given { table << { bytes: 12, file: 'foo.zip' } }
-    Given { table << { bytes: 1200, file: 'bar.zip' } }
-    Given { table << { bytes: 12000000, file: 'baz.zip' } }
+  context "data has right-aligned fields" do
+    Given(:table) { described_class.new alignment: {bytes: :right} }
+    Given { table << {bytes: 12, file: "foo.zip"} }
+    Given { table << {bytes: 1200, file: "bar.zip"} }
+    Given { table << {bytes: 12000000, file: "baz.zip"} }
 
     Then { expect(table).to look_like(<<-___) }
          BYTES | FILE   
@@ -29,16 +29,16 @@ RSpec.describe Legitable::Table do
     ___
   end
 
-  context 'change up the look!' do
+  context "change up the look!" do
     Given(:table) do
-      described_class.new alignment: { bytes: :right },
-                          delimiter: '  ',
-                          separator: '='
+      described_class.new alignment: {bytes: :right},
+        delimiter: "  ",
+        separator: "="
     end
 
-    Given { table << { bytes: 12, file: 'foo.zip' } }
-    Given { table << { bytes: 1200, file: 'bar.zip' } }
-    Given { table << { bytes: 12000000, file: 'baz.zip' } }
+    Given { table << {bytes: 12, file: "foo.zip"} }
+    Given { table << {bytes: 1200, file: "bar.zip"} }
+    Given { table << {bytes: 12000000, file: "baz.zip"} }
 
     Then { expect(table).to look_like(<<-___) }
          BYTES  FILE   
@@ -49,10 +49,10 @@ RSpec.describe Legitable::Table do
     ___
   end
 
-  context 'markdown style' do
+  context "markdown style" do
     Given(:table) { described_class.new style: :markdown }
-    Given { table << { foo: 'phew', bar: 'baarr', baz: 'bajh' } }
-    Given { table << { foo: 'phoolie', bar: 'bar', baz: 'bububububazzzz' } }
+    Given { table << {foo: "phew", bar: "baarr", baz: "bajh"} }
+    Given { table << {foo: "phoolie", bar: "bar", baz: "bububububazzzz"} }
 
     Then { expect(table).to look_like(<<-___) }
       FOO     | BAR   | BAZ           
@@ -62,7 +62,7 @@ RSpec.describe Legitable::Table do
     ___
   end
 
-  context 'with column processors' do
+  context "with column processors" do
     Given(:table) do
       described_class.new do
         formatting :bar do |value|
@@ -71,8 +71,8 @@ RSpec.describe Legitable::Table do
       end
     end
 
-    Given { table << { foo: 'phew', bar: 'baarr', baz: 'bajh' } }
-    Given { table << { foo: 'phoolie', bar: 'bar', baz: 'bububububazzzz' } }
+    Given { table << {foo: "phew", bar: "baarr", baz: "bajh"} }
+    Given { table << {foo: "phoolie", bar: "bar", baz: "bububububazzzz"} }
 
     Then { expect(table).to look_like(<<-___) }
       FOO     | BAR       | BAZ           
@@ -82,7 +82,7 @@ RSpec.describe Legitable::Table do
     ___
   end
 
-  context 'with header processors' do
+  context "with header processors" do
     Given(:table) do
       described_class.new do
         formatting_headers do |header|
@@ -91,8 +91,8 @@ RSpec.describe Legitable::Table do
       end
     end
 
-    Given { table << { foo: 'phew', bar: 'baarr', baz: 'bajh' } }
-    Given { table << { foo: 'phoolie', bar: 'bar', baz: 'bububububazzzz' } }
+    Given { table << {foo: "phew", bar: "baarr", baz: "bajh"} }
+    Given { table << {foo: "phoolie", bar: "bar", baz: "bububububazzzz"} }
 
     Then { expect(table).to look_like(<<-___) }
       Foo     | Bar   | Baz           
@@ -102,10 +102,10 @@ RSpec.describe Legitable::Table do
     ___
   end
 
-  context 'table with only one column' do
-    Given { table << { foo: 'foo' } }
-    Given { table << { foo: 'phew' } }
-    Given { table << { foo: 'foolishness' } }
+  context "table with only one column" do
+    Given { table << {foo: "foo"} }
+    Given { table << {foo: "phew"} }
+    Given { table << {foo: "foolishness"} }
 
     Then { expect(table).to look_like(<<-___) }
       FOO        
@@ -116,11 +116,11 @@ RSpec.describe Legitable::Table do
     ___
   end
 
-  context 'appending repeatedly' do
+  context "appending repeatedly" do
     Given do
-      table << { foo: 'foo' } \
-            << { foo: 'phew' } \
-            << { foo: 'foolishness' }
+      table << {foo: "foo"} \
+            << {foo: "phew"} \
+            << {foo: "foolishness"}
     end
 
     Then { expect(table).to look_like(<<-___) }

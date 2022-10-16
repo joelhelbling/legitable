@@ -1,10 +1,10 @@
-require 'ostruct'
+require "ostruct"
 
 module Legitable
   class Table
     attr_reader :rows, :headers, :delimiter, :separator, :format, :style
 
-    def initialize(alignment: {}, delimiter: ' | ', separator: '-', style: nil, &block)
+    def initialize(alignment: {}, delimiter: " | ", separator: "-", style: nil, &block)
       @rows = []
       @headers = []
       @format = {}
@@ -49,14 +49,13 @@ module Legitable
     end
 
     def add_row(row)
-      rows << headers.inject({}) do |memo, header|
+      rows << headers.each_with_object({}) do |header, memo|
         formatter = format[header].formatter
         value = formatter.call(row[header].to_s).to_s
         if format[header].width < value.length
           format[header].width = value.length
         end
         memo[header] = value
-        memo
       end
     end
 
@@ -85,7 +84,7 @@ module Legitable
       if style == :markdown
         headers.map do |header|
           separator * format[header].width
-        end.join('-|-')
+        end.join("-|-")
       else
         separator * row_width
       end
@@ -94,17 +93,17 @@ module Legitable
     def render_cell(header, value)
       cell_width = format[header].width
 
-      (format[header].align == :right) ?
-        value.rjust(cell_width, ' ') :
-        value.to_s + (' ' * (cell_width - value.to_s.length))
+      format[header].align == :right ?
+        value.rjust(cell_width, " ") :
+        value.to_s + (" " * (cell_width - value.to_s.length))
     end
 
     def formatting(header, &block)
-      @formatters[header] = block ? block : default_formatter
+      @formatters[header] = block || default_formatter
     end
 
     def default_formatter
-      @default_formatter ||= Proc.new {|value| value.to_s }
+      @default_formatter ||= proc { |value| value.to_s }
     end
 
     def formatting_headers(&block)
@@ -116,7 +115,7 @@ module Legitable
     end
 
     def default_header_formatter
-      @default_header_formatter ||= Proc.new { |header| header.to_s.upcase }
+      @default_header_formatter ||= proc { |header| header.to_s.upcase }
     end
   end
 end
