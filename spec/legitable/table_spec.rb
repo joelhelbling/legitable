@@ -131,4 +131,32 @@ RSpec.describe Legitable::Table do
       foolishness
     ___
   end
+
+  context "with an Array" do
+    Given(:data) { [{foo: "foo"}, {foo: "phew"}, {foo: "fewlishniss"}] }
+
+    When { table << data }
+
+    Then { expect(table).to look_like(<<-___) }
+      FOO        
+      -----------
+      foo        
+      phew       
+      fewlishniss
+    ___
+  end
+
+  context "with an Enumerable" do
+    Given(:data) { [{foo: "foo"}, {foo: "phew"}, {foo: "phewlissnesh"}].each }
+
+    When { table << data }
+
+    Then { expect(table).to look_like(<<-___) }
+      FOO         
+      ------------
+      foo         
+      phew        
+      phewlissnesh
+    ___
+  end
 end

@@ -15,23 +15,30 @@ module Legitable
       @style = style
 
       if style == :markdown
-        @delimiter = ' | '
-        @separator = '-'
+        @delimiter = " | "
+        @separator = "-"
       end
 
-      self.instance_eval(&block) unless block.nil?
+      instance_eval(&block) unless block.nil?
     end
 
-    def <<(row)
-      initialize_headers(row) if headers.empty?
-      add_row row
+    def <<(data)
+      case data
+      when Array
+        data.each { |row| self << row }
+      when Hash
+        initialize_headers(data) if headers.empty?
+        add_row data
+      when Enumerable
+        data.each { |row| self << row }
+      end
       self
     end
 
     def to_s
-      <<-EOS
-#{render_headers}
-#{render_rows}
+      <<~EOS
+        #{render_headers}
+        #{render_rows}
       EOS
     end
 
